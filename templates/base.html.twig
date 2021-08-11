@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>{% block title %}Курс валют ЦБР{% endblock %}</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/dashboard.css" rel="stylesheet">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
+    {% block stylesheets %}
+        {#{{ encore_entry_link_tags('app') }}#}
+    {% endblock %}
+
+    {% block javascripts %}
+        {#{{ encore_entry_script_tags('app') }}#}
+    {% endblock %}
+</head>
+<body>
+<main class="container">
+    <div class="bg-light p-5 rounded">
+        {% block form %}
+            <form>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><a href="/" class="text-decoration-none">&#8381; &#36; &#8364;</a></span>
+                    {% block formselector %}
+                        <select class="form-select" id="inputGroupSelect02" name="id">
+                            <option value="0" selected>Все валюты</option>
+                            {% for item in currencies %}
+                                <option value="{{ item.getId }}">{{ item.getName() }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endblock %}
+                    <span class="input-group-text" id="basic-addon1">Начальная дата</span>
+                    <input type="date" value="{{ start_date }}" name="from" class="form-control">
+                    <span class="input-group-text" id="basic-addon1">Конечная дата</span>
+                    <input type="date" value="{{ end_date }}" name="to" class="form-control">
+                    {% if reverse == true %}
+                        <input type="radio" name="order" value="desc" class="btn-check" id="option1" autocomplete="off" checked>
+                        <label class="btn btn-outline-secondary" for="option1">&#9660;</label>
+                        <input type="radio" name="order" value="asc" class="btn-check" id="option2" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="option2">&#9650;</label>
+                    {% else %}
+                        <input type="radio" name="order" value="desc" class="btn-check" id="option1" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="option1">&#9660;</label>
+                        <input type="radio" name="order" value="asc" class="btn-check" id="option2" autocomplete="off" checked>
+                        <label class="btn btn-outline-secondary" for="option2">&#9650;</label>
+                    {% endif %}
+                    {% block formbutton %}
+                        <button formaction="/" class="btn btn-outline-secondary" type="submit" id="button-addon2">Показать</button>
+                        <button formaction="/json" class="btn btn-outline-secondary" type="submit" name="export" value="json" id="button-addon2">JSON</button>
+                    {% endblock %}
+                    <button formaction="/currency/update" class="btn btn-outline-secondary" type="submit" id="button-addon2">Импорт</button>
+                </div>
+            </form>
+        {% endblock %}
+        {% block body %}{% endblock %}
+    </div>
+</main>
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

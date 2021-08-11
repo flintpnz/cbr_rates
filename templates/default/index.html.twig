@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Курс валют ЦБР{% endblock %}
+
+{% block body %}
+
+    <h2>Курс всех валют</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th scope="col">Валюта</th>
+                <th scope="col">Номинал</th>
+                <th scope="col">Курс</th>
+                <th scope="col"><a href="?order=desc" class="text-decoration-none">&#9660;</a> Дата <a href="?order=asc" class="text-decoration-none">&#9650;</a></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for rate in pagination %}
+                <tr>
+                    <td><a href="/currency/{{ rate.getIdCurrency().getId() }}/">{{ rate.getIdCurrency().getName() }}</a></td>
+                    <td>{{ rate.getNominal() }}</td>
+                    <td>{{ rate.getValue() }}</td>
+                    <td>{{ rate.getDate().format('Y-m-d') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-center">{{ knp_pagination_render(pagination) }}</div>
+
+{% endblock %}
